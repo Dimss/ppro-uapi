@@ -65,11 +65,34 @@ class Users(BaseConfigs):
         if email is None:
             return list(self.db.users.find({}, {"_id": False, "password": False}))
         else:
-            user = self.db.users.find_one({"email": email}, {"_id": False})
+            user = self.db.users.find_one({"email": email}, {"_id": False, "password": False})
             # If user is None, raise UserNotFound exception
             if user:
                 return user
             logging.warning(f"User not found in BD, gonna rise UserNotFound exception")
+            raise UserNotFound(email)
+
+    def update_user(self, email, user_obj):
+        logging.info(f"Gonna update user {email}")
+        # Updating the user document
+        update_doc = {
+            'firstName': user_obj['firstName'],
+            'lastName': user_obj['lastName'],
+        }
+        res = self.db.users.update_one({'email': email}, {"$set": update_doc})
+        if res.matched_count == 0:
+            logging.warning(f"User {email} not found ")
+            raise UserNotFound(email)
+        if res.modified_count == 0:
+            logging.warning(f"User {email} not modified")
+            raise UserNotModified(email)
+
+    def delete_user(self, email):
+        logging.info(f"Gonna delete user {email}")
+        # Deleting the config document
+        res = self.db.users.delete_one({'email': email})
+        if res.deleted_count == 0:
+            logging.warning(f"User {email} not found!")
             raise UserNotFound(email)
 
     def _hash_password(self, password):
