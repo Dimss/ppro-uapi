@@ -14,3 +14,7 @@ config.read("{current_dir}/{ini_file}".format(current_dir=os.path.dirname(__file
 DB_HOST = config.get('db', 'host')
 DB_PORT = config.getint('db', 'port')
 DB_NAME = config.get('db', 'name')
+
+JWT_SECRET = config.get('jwt', 'secret')
+JWT_ALGO = config.get('jwt', 'algo')
+JWT_TTL = config.getint('jwt', 'ttl')

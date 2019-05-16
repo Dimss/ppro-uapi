@@ -35,3 +35,13 @@ class UserNotFound(Exception):
 class UserNotModified(Exception):
     def __init__(self, user):
         super().__init__(f"User {user} was not modified")
+
+
+class WrongPassword(Exception):
+    def __init__(self, email):
+        super().__init__(f"Wrong password for user {email}")
+
+
+class BadToken(Exception):
+    def __init__(self):
+        super().__init__(f"Token is not valid")

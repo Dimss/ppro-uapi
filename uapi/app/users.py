@@ -2,7 +2,7 @@ import logging
 from pymongo import MongoClient
 from uapi.conf import conf
 from .exceptions import *
-import hashlib, uuid
+import hashlib, binascii, os
 
 
 class DB(object):
@@ -41,7 +41,7 @@ class Users(BaseConfigs):
     def __init__(self):
         super().__init__()
 
-    def create_configs(self, user_obj):
+    def create_user(self, user_obj, role='user'):
         try:
             # If user is not existing yet in DB
             # the self.list_configs(config_obj['name']) function
@@ -55,17 +55,25 @@ class Users(BaseConfigs):
         except UserNotFound:
             # ALL GOOD - create a new user object
             logging.info("Creating new configs object")
-            user_obj['password'] = self._hash_password(user_obj['password'])
+            user_obj['password'] = self.hash_password(user_obj['password'])
+            # Append role to user
+            user_obj['role'] = role
+            # Insert user object ot DB
             self.db.users.insert_one(user_obj)
+            # Remove Mongo UUID
             del (user_obj['_id'])
+            # Remove password hash
             del (user_obj['password'])
             return user_obj
 
-    def list_users(self, email=None):
+    def list_users(self, email=None, include_password_hash=False):
         if email is None:
             return list(self.db.users.find({}, {"_id": False, "password": False}))
         else:
-            user = self.db.users.find_one({"email": email}, {"_id": False, "password": False})
+            if include_password_hash:
+                user = self.db.users.find_one({"email": email}, {"_id": False})
+            else:
+                user = self.db.users.find_one({"email": email}, {"_id": False, "password": False})
             # If user is None, raise UserNotFound exception
             if user:
                 return user
@@ -95,7 +103,11 @@ class Users(BaseConfigs):
             logging.warning(f"User {email} not found!")
             raise UserNotFound(email)
 
-    def _hash_password(self, password):
-        salt = uuid.uuid4().hex
-        hashed_password = hashlib.sha512(password.encode('utf-8') + salt.encode('utf-8')).hexdigest()
-        return hashed_password
+    def hash_password(self, password):
+        salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
+        hash = hashlib.pbkdf2_hmac('sha512', password.encode('utf-8'), salt, 100000)
+        hash = binascii.hexlify(hash)
+        return (salt + hash).decode('ascii')
+        # salt = uuid.uuid4().hex
+        # hashed_password = hashlib.sha512(password.encode('utf-8') + salt.encode('utf-8')).hexdigest()
+        # return hashed_password

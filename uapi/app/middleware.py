@@ -28,3 +28,4 @@ class ResponseMiddleware(object):
         resource.status = falcon.HTTP_200
         resource.message = None
         resource.payload = None
+
