@@ -6,6 +6,16 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
+falcon = "*"
+pymongo = "*"
+gunicorn = "*"
+jsonschema = "*"
+webtest = "*"
 
 [requires]
 python_version = "3.7"
+
+
+[scripts]
+api  = "gunicorn -b 0.0.0.0:8080 --chdir uapi --workers 4 run:api "
+test = "python -m unittest discover"
