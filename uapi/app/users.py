@@ -47,9 +47,9 @@ class Users(BaseConfigs):
             # the self.list_configs(config_obj['name']) function
             # will rise UserNotFound exception
             self.list_users(user_obj['email'])
-            # The ConfigNotFound exception wasn't raised, which is mean
-            # the config object with provided name already exists in DB
-            # gonna rise ConfigAlreadyExists exception
+            # The UserNotFound exception wasn't raised, which is mean
+            # the user object with provided email already exists in DB
+            # gonna rise UserAlreadyExists exception
             logging.error("Unable to create new user object, the user name already exists")
             raise UserAlreadyExists(user_obj['email'])
         except UserNotFound:
@@ -58,11 +58,12 @@ class Users(BaseConfigs):
             user_obj['password'] = self._hash_password(user_obj['password'])
             self.db.users.insert_one(user_obj)
             del (user_obj['_id'])
+            del (user_obj['password'])
             return user_obj
 
     def list_users(self, email=None):
         if email is None:
-            return list(self.db.users.find({}, {"_id": False}))
+            return list(self.db.users.find({}, {"_id": False, "password": False}))
         else:
             user = self.db.users.find_one({"email": email}, {"_id": False})
             # If user is None, raise UserNotFound exception

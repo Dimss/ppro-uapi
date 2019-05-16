@@ -17,6 +17,8 @@ class JSONTranslator(object):
 
 class ResponseMiddleware(object):
     def process_response(self, req, resp, resource, req_succeeded):
+        if resource is None:
+            raise AppException(falcon.HTTP_404, "Resource not found")
         # Set body only if it's not already set by something else,
         # for example, by exception
         if resp.body is None:

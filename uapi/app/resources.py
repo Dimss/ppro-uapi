@@ -12,11 +12,11 @@ class BaseResource(object):
 
 
 class UserResource(BaseResource):
-    def on_get(self, req, resp):
-        self.payload = {"hello world": "bla"}
+    def on_get(self, req, resp, email=None):
+        self.payload = Users().list_users(email)
 
     @falcon.before(create_user_req_schema)
     def on_post(self, req, resp):
         user = req.context.get('doc')
-        Users().create_configs(user)
-        x = 1
+        self.payload = Users().create_configs(user)
+        self.status = falcon.HTTP_201
