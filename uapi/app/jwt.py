@@ -40,7 +40,7 @@ class JWTGenerator(object):
     def generate_auth_data(self):
         if self._authenticated is False:
             raise WrongPassword(self.email)
-        payload = {'sub': self.email, 'iis': 'uapi', "exp": int(time.time()) + conf.JWT_TTL}
+        payload = {'sub': self.email, 'iis': 'uapi', "role": self.user['role'], "exp": int(time.time()) + conf.JWT_TTL}
         token = jwt.encode(payload, conf.JWT_SECRET, algorithm=conf.JWT_ALGO).decode('utf-8')
         return {'token': token, 'email': self.email, 'role': self.user['role']}
 

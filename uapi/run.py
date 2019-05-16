@@ -5,7 +5,13 @@ from uapi.app.middleware import *
 from uapi.app.exceptions import exception_serializer, generic_error_handler
 
 # Init application
-api = application = falcon.API(middleware=[JSONTranslator(), ResponseMiddleware()])
+api = application = falcon.API(middleware=[
+    ResponseMiddleware(),
+    CORSMiddleware(),
+    JSONTranslator(),
+    AuthenticationMiddleware(),
+
+])
 # Bootstrap application
 bootstrap.init_routes(api)
 # Register JSON exception serializer

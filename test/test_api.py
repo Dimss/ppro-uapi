@@ -1,7 +1,7 @@
 import unittest
 from uapi.app.users import DB
 from uapi.conf import conf
-from .datamock import get_mock_user, get_mock_users
+from .datamock import get_mock_user, get_mock_users, get_user_creds
 from webtest import TestApp
 from uapi import run
 import falcon
@@ -28,6 +28,7 @@ class TestAPIEndpoints(unittest.TestCase):
         user = get_mock_user()
         res = self.app.post_json("/user", user)
         new_user = json.loads(res.body)
+        user['role'] = 'user'
         del (user['password'])
         self.assertEqual(new_user['data'], user)
 
@@ -73,6 +74,12 @@ class TestAPIEndpoints(unittest.TestCase):
         self.app.post_json("/user", user)
         self.app.delete(f"/user/{user['email']}")
         self.app.get(f"/user/{user['email']}", status=falcon.HTTP_404)
+
+    def test_create_jwt_token(self):
+        user = get_mock_user()
+        self.app.post_json("/user", user)
+        res = json.loads(self.app.post_json("/jwt", get_user_creds()).body)
+        x = 1
 
 
 if __name__ == '__main__':

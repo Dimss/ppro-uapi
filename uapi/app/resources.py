@@ -7,16 +7,27 @@ from .validators import create_user_req_schema, update_user_req_schema, create_u
 
 
 class BaseResource(object):
+
     def __init__(self):
         self.message = None
         self.payload = None
         self.status = falcon.HTTP_200
 
+    def resource_permissions(self):
+        return {'public': []}
+
 
 class UserResource(BaseResource):
+    def resource_permissions(self):
+        return {'public': ['post']}
+
     def on_get(self, req, resp, email=None):
         try:
-            self.payload = Users().list_users(email)
+            # Only users with admin role can list users
+            if req.context.user['role'] != 'admin' and email is None:
+                self.payload = Users().list_users(req.context.user['email'])
+            else:
+                self.payload = Users().list_users(email)
         except UserNotFound:
             raise AppException(falcon.HTTP_404, f"User {email} not found")
         except Exception as ex:
@@ -39,18 +50,32 @@ class UserResource(BaseResource):
     @falcon.before(update_user_req_schema)
     def on_put(self, req, resp, email):
         user_obj = req.context.get('doc')
-        Users().update_user(email, user_obj)
+        try:
+            if req.context.user['role'] != 'admin' and email != req.context.user['email']:
+                logging.warning(f"Insufficient resource permissions for user: {req.context.user['email']}")
+                raise AppException(falcon.HTTP_403, "Forbidden")
+            Users().update_user(email, user_obj)
+        except UserNotFound:
+            raise AppException(falcon.HTTP_404, f"User {email} not found")
+        except UserNotModified:
+            raise AppException(falcon.HTTP_304)
 
     def on_delete(self, req, resp, email):
         if email is None:
             raise AppException(falcon.HTTP_406, "Missing config name")
         try:
+            if req.context.user['role'] != 'admin':
+                logging.warning(f"Insufficient resource permissions for user: {req.context.user['email']}")
+                raise AppException(falcon.HTTP_403, "Forbidden")
             Users().delete_user(email)
         except UserNotFound:
             raise AppException(falcon.HTTP_404, f"User {email} not found")
 
 
 class JWTResource(BaseResource):
+
+    def resource_permissions(self):
+        return {'public': ['get', 'post']}
 
     def on_get(self, req, resp, token):
         try:

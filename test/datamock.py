@@ -3,7 +3,14 @@ def get_mock_user():
         "email": "user1@gmail.com",
         "firstName": "FirstName-User1",
         "lastName": "LastName-User1",
-        "password": "secret-password"
+        "password": "mypass",
+    }
+
+
+def get_user_creds():
+    return {
+        "email": "user1@gmail.com",
+        "password": "mypass",
     }
 
 
@@ -13,12 +20,12 @@ def get_mock_users():
             "email": "user1@gmail.com",
             "firstName": "FirstName-User1",
             "lastName": "LastName-User1",
-            "password": "secret-password"
+            "password": "secret-password",
         },
         {
             "email": "user2@gmail.com",
             "firstName": "FirstName-User2",
             "lastName": "LastName-User2",
-            "password": "secret-password"
+            "password": "secret-password",
         }
     ]
