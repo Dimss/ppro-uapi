@@ -22,16 +22,16 @@ class AppException(falcon.HTTPError):
         return json.dumps({'status': 'error', 'message': self.description})
 
 
-class ConfigAlreadyExists(Exception):
-    def __init__(self, config_name):
-        super().__init__(f"Config with name {config_name} already exists.")
+class UserAlreadyExists(Exception):
+    def __init__(self, email):
+        super().__init__(f"User with email {email} already exists.")
 
 
-class ConfigNotFound(Exception):
-    def __init__(self, config_name):
-        super().__init__(f"Config name {config_name} not found")
+class UserNotFound(Exception):
+    def __init__(self, email):
+        super().__init__(f"User {email} not found")
 
 
-class ConfigNotModified(Exception):
-    def __init__(self, config_name):
-        super().__init__(f"Config name {config_name} was not modified")
+class UserNotModified(Exception):
+    def __init__(self, user):
+        super().__init__(f"User {user} was not modified")

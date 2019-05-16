@@ -1,5 +1,7 @@
 import logging
 import falcon
+from .users import Users
+from .validators import create_user_req_schema
 
 
 class BaseResource(object):
@@ -13,5 +15,8 @@ class UserResource(BaseResource):
     def on_get(self, req, resp):
         self.payload = {"hello world": "bla"}
 
-    def on_post(self, res, resp):
-        pass
+    @falcon.before(create_user_req_schema)
+    def on_post(self, req, resp):
+        user = req.context.get('doc')
+        Users().create_configs(user)
+        x = 1
