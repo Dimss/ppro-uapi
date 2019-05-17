@@ -16,22 +16,21 @@ stages:
 before_script:
   - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
 
-build:
+build docker:
   stage: build
   script:
    - docker build -t $DOCKER_REPOSITORY/$APP_NAME:$CI_COMMIT_SHORT_SHA .
-   - docker tag $DOCKER_REPOSITORY/$APP_NAME:$CI_COMMIT_SHORT_SHA $DOCKER_REPOSITORY/$APP_NAME:latest
-   - docker push $DOCKER_REPOSITORY/$APP_NAME:$CI_COMMIT_SHORT_SHA
-   - docker push $DOCKER_REPOSITORY/$APP_NAME:latest
   only:
   - master
 
-test:
+run unittest:
   stage: test
   script:
     - docker run -it $DOCKER_REPOSITORY/$APP_NAME:$CI_COMMIT_SHORT_SHA pipenv run test
+  only:
+  - master
 
-build:
+push image to docker registry:
   stage: push
   script:
    - docker tag $DOCKER_REPOSITORY/$APP_NAME:$CI_COMMIT_SHORT_SHA $DOCKER_REPOSITORY/$APP_NAME:latest
