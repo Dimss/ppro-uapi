@@ -32,14 +32,14 @@ def get_user_creds():
 
 def get_admin_creds():
     return {
-        "email": "admin@myapp.com",
+        "email": "admin@admin",
         "password": "admin",
     }
 
 
 def get_admin_user():
     return {
-        "email": "admin@myapp.com",
+        "email": "admin@admin",
         "firstName": "admin",
         "lastName": "admin",
         "password": "admin",

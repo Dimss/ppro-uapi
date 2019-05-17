@@ -23,7 +23,7 @@ class DB(object):
         return DB._CONN
 
 
-class BaseConfigs(object):
+class BaseUser(object):
     def __init__(self):
         self.db = DB.get_db_conn()[conf.DB_NAME]
 
@@ -31,15 +31,18 @@ class BaseConfigs(object):
         return self.db.command('ping')
 
 
-class Users(BaseConfigs):
+class Users(BaseUser):
     """
     Users class is hold all business
     logic around creation,listing,searching and
     updating of users objects
     """
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, db=None):
+        if db:
+            self.db = db
+        else:
+            super().__init__()
 
     def create_user(self, user_obj, role='user'):
         try:
@@ -108,6 +111,3 @@ class Users(BaseConfigs):
         hash = hashlib.pbkdf2_hmac('sha512', password.encode('utf-8'), salt, 100000)
         hash = binascii.hexlify(hash)
         return (salt + hash).decode('ascii')
-        # salt = uuid.uuid4().hex
-        # hashed_password = hashlib.sha512(password.encode('utf-8') + salt.encode('utf-8')).hexdigest()
-        # return hashed_password

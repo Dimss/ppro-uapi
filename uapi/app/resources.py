@@ -1,7 +1,7 @@
 import logging
 import falcon
 from .exceptions import *
-from .users import Users
+from .users import Users, BaseUser
 from .jwt import JWTGenerator, JWTValidator
 from .validators import create_user_req_schema, update_user_req_schema, create_user_jwt_token_req_schema
 
@@ -96,3 +96,22 @@ class JWTResource(BaseResource):
             raise AppException(falcon.HTTP_401, "Unauthorized")
         except UserNotFound:
             raise AppException(falcon.HTTP_401, "Unauthorized")
+
+
+class LivenessResource(BaseResource):
+    def resource_permissions(self):
+        return {'public': ['get']}
+
+    def on_get(self, req, resp):
+        pass
+
+
+class ReadinessResource(BaseResource):
+    def resource_permissions(self):
+        return {'public': ['get']}
+
+    def on_get(self, req, resp):
+        try:
+            BaseUser().ping_db()
+        except Exception as ex:
+            raise AppException(falcon.HTTP_502, "DB is not available yet")

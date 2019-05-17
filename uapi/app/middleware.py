@@ -79,14 +79,13 @@ class CORSMiddleware(object):
 
 class ResponseMiddleware(object):
     def process_response(self, req, resp, resource, req_succeeded):
-        if resource is None:
-            raise AppException(falcon.HTTP_404, "Resource not found")
         # Set body only if it's not already set by something else,
         # for example, by exception
         if resp.body is None:
             resp.status = resource.status
             resp.body = json.dumps({'status': 'ok', 'message': resource.message, 'data': resource.payload})
         # Cleanup resource status,message and data
-        resource.status = falcon.HTTP_200
-        resource.message = None
-        resource.payload = None
+        if resource:
+            resource.status = falcon.HTTP_200
+            resource.message = None
+            resource.payload = None
