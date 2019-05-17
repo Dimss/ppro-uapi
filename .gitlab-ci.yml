@@ -2,13 +2,24 @@ image: docker:stable
 
 services:
   - docker:dind
+  - mongo:latest
 
 variables:
   DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
 
+stages:
+  - test
+  - build
+
 before_script:
   - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
+
+test:
+  stage: test
+  script:
+    - pipenv insatll
+    - pipenv run test
 
 build:
   stage: build
@@ -20,10 +31,4 @@ build:
   only:
   - master
 
-test:
-  stage: test
-  services:
-    - mongo:latest
-  script:
-    - pipenv insatll
-    - pipenv run test
+
