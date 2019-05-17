@@ -1,0 +1,13 @@
+variables:
+  BLA: "bla"
+
+
+
+staging:
+  stage: deploy
+  script:
+  - gem install dpl
+  - dpl --provider=heroku --app=$FRONTEND_STAGE_APP_NAME --api-key=$HEROKU_STAGE_API_KEY
+  only:
+  - master
+
