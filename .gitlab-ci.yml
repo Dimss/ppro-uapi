@@ -1,15 +1,22 @@
+image: docker:stable
+
+services:
+  - docker:dind
+
 variables:
-  BLA: "bla"
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+
+before_script:
+  - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
 
 build:
-  image: docker:stable
-  services:
-   - docker:dind
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_DRIVER: overlay2
   stage: build
   script:
-   - docker login -u dimssss -p LeonBlum2@419
-   - docker build -t dimssss/uapi:latest .
-   - docker push dimssss/uapi:latest
+   - docker build -t $DOCKER_REPOSITORY/$APP_NAME:$CI_COMMIT_SHORT_SHA .
+   - docker tag $DOCKER_REPOSITORY/$APP_NAME:$CI_COMMIT_SHORT_SHA $DOCKER_REPOSITORY/$APP_NAME:latest
+   - docker push $DOCKER_REPOSITORY/$APP_NAME:$CI_COMMIT_SHORT_SHA
+   - docker push $DOCKER_REPOSITORY/$APP_NAME:latest
+  only:
+  - master
+
