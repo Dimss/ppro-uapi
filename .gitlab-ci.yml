@@ -9,19 +9,12 @@ variables:
   DOCKER_DRIVER: overlay2
 
 stages:
-  - test
   - build
+  - test
+  - push
 
 before_script:
   - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
-
-test:
-  stage: test
-  script:
-    - python version
-    - python3 version
-#    - pipenv insatll
-#    - pipenv run test
 
 build:
   stage: build
@@ -33,4 +26,17 @@ build:
   only:
   - master
 
+test:
+  stage: test
+  script:
+    - docker run -it $DOCKER_REPOSITORY/$APP_NAME:$CI_COMMIT_SHORT_SHA
+
+build:
+  stage: push
+  script:
+   - docker tag $DOCKER_REPOSITORY/$APP_NAME:$CI_COMMIT_SHORT_SHA $DOCKER_REPOSITORY/$APP_NAME:latest
+   - docker push $DOCKER_REPOSITORY/$APP_NAME:$CI_COMMIT_SHORT_SHA
+   - docker push $DOCKER_REPOSITORY/$APP_NAME:latest
+  only:
+  - master
 
