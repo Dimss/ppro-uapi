@@ -57,7 +57,7 @@ class Users(BaseUser):
             raise UserAlreadyExists(user_obj['email'])
         except UserNotFound:
             # ALL GOOD - create a new user object
-            logging.info("Creating new configs object")
+            logging.info("Creating new user object")
             user_obj['password'] = self.hash_password(user_obj['password'])
             # Append role to user
             user_obj['role'] = role

@@ -20,3 +20,10 @@ build:
   only:
   - master
 
+test:
+  stage: test
+  services:
+    - mongo:latest
+  script:
+    - pipenv insatll
+    - pipenv run test
