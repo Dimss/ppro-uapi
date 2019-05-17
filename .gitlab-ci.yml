@@ -29,7 +29,7 @@ build:
 test:
   stage: test
   script:
-    - docker run -it $DOCKER_REPOSITORY/$APP_NAME:$CI_COMMIT_SHORT_SHA
+    - docker run -it $DOCKER_REPOSITORY/$APP_NAME:$CI_COMMIT_SHORT_SHA pipenv run test
 
 build:
   stage: push
