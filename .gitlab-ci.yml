@@ -18,8 +18,10 @@ before_script:
 test:
   stage: test
   script:
-    - pipenv insatll
-    - pipenv run test
+    - python version
+    - python3 version
+#    - pipenv insatll
+#    - pipenv run test
 
 build:
   stage: build
