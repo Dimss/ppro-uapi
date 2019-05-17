@@ -14,6 +14,8 @@ api = application = falcon.API(middleware=[
 ])
 # Bootstrap application
 bootstrap.init_routes(api)
+# Populate system data into DB
+bootstrap.populate_system_data()
 # Register JSON exception serializer
 api.set_error_serializer(exception_serializer)
 # Register generic error handler

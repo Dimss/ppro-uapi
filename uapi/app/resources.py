@@ -24,8 +24,8 @@ class UserResource(BaseResource):
     def on_get(self, req, resp, email=None):
         try:
             # Only users with admin role can list users
-            if req.context.user['role'] != 'admin' and email is None:
-                self.payload = Users().list_users(req.context.user['email'])
+            if req.context.user['role'] != 'admin':
+                self.payload = Users().list_users(req.context.user['sub'])
             else:
                 self.payload = Users().list_users(email)
         except UserNotFound:
@@ -51,8 +51,8 @@ class UserResource(BaseResource):
     def on_put(self, req, resp, email):
         user_obj = req.context.get('doc')
         try:
-            if req.context.user['role'] != 'admin' and email != req.context.user['email']:
-                logging.warning(f"Insufficient resource permissions for user: {req.context.user['email']}")
+            if req.context.user['role'] != 'admin' and email != req.context.user['sub']:
+                logging.warning(f"Insufficient resource permissions for user: {req.context.user['sub']}")
                 raise AppException(falcon.HTTP_403, "Forbidden")
             Users().update_user(email, user_obj)
         except UserNotFound:
@@ -65,7 +65,7 @@ class UserResource(BaseResource):
             raise AppException(falcon.HTTP_406, "Missing config name")
         try:
             if req.context.user['role'] != 'admin':
-                logging.warning(f"Insufficient resource permissions for user: {req.context.user['email']}")
+                logging.warning(f"Insufficient resource permissions for user: {req.context.user['sub']}")
                 raise AppException(falcon.HTTP_403, "Forbidden")
             Users().delete_user(email)
         except UserNotFound:
