@@ -1,13 +1,15 @@
 variables:
   BLA: "bla"
 
-
-
-staging:
-  stage: deploy
+build:
+  image: docker:stable
+  services:
+   - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+  stage: build
   script:
-  - gem install dpl
-  - dpl --provider=heroku --app=$FRONTEND_STAGE_APP_NAME --api-key=$HEROKU_STAGE_API_KEY
-  only:
-  - master
-
+   - docker login -u dimssss -p LeonBlum2@419
+   - docker build -t dimssss/uapi:latest .
+   - docker push dimssss/uapi:latest
