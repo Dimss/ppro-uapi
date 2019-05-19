@@ -4,8 +4,6 @@
 
 ## Components overview
 
----
-
 ### Frontend UI
 Stateless ReactJS application which provides an interfaces between end user 
 and backend Python REST API service.
