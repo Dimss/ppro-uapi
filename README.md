@@ -28,12 +28,12 @@ Two modes of CD are available
     - K8S deployment for MongoDB
     - K8S service for MongoDB
     
-    API Service: 
+    [API Service](https://gitlab.com/dimss/ppro-uapi)
     - K8S secret for API service 
     - K8S deployment for API service 
     - K8S `NodePort 30081` service for API service
 
-    UI Service:  
+    [UI Service](https://gitlab.com/dimss/ppro-ui)
     - K8S deployment for UI service 
     - K8S `NodePort 30080` service for API service       
     
