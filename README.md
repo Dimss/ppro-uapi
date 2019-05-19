@@ -9,7 +9,20 @@
 ### CI 
 CI is done by GitLab CI public service and includes two stages (see `.gitlab-ci.yml`)
 - test - run unit tests 
-- build - create docker image
+- build - create docker image. To build your own image, you'll have to define following GitLab CI environment variables
+    - `DOCKER_REGISTRY_USER` username for your docker registry 
+    - `DOCKER_REGISTRY_PASSWORD` password for your docker registry 
+    - `DOCKER_REPOSITORY` the name of the docker repository to where to push the image
+    - `APP_NAME` the application name which will be used as a docker image name
+    
+    Example 
+     - `DOCKER_REPOSITORY=docker.io/dimssss`
+     - `APP_NAME=uapi`
+     
+     Docker image will be `docker.io/dimssss/uapi:latest` and `docker.io/dimssss/uapi:git_sha_short_commit`   
+      
+  
+
 
 ### CD 
 Two modes of CD are available
