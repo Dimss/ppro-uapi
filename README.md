@@ -19,11 +19,13 @@ CI is done by GitLab CI public service and includes two stages (see `.gitlab-ci.
      - `DOCKER_REPOSITORY=docker.io/dimssss`
      - `APP_NAME=uapi`
      
-     Docker image will be `docker.io/dimssss/uapi:latest` and `docker.io/dimssss/uapi:git_sha_short_commit`   
-      
-  
+     Docker image will be `docker.io/dimssss/uapi:latest` and `docker.io/dimssss/uapi:git_sha_short_commit`
+     
+     If you don't want to build your own image you may use existing images
+     - ui - `docker.io/dimssss/uapiui:latest`
+     - api - `docker.io/dimssss/uapi:latest`
 
-
+           
 ### CD 
 Two modes of CD are available
 - Standalone deployment with raw K8S yaml file deploy following objects
