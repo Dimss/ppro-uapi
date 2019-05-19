@@ -56,7 +56,13 @@ Two modes of CD are available
     
     - Deploy the Operator `kubectl create -f https://gitlab.com/dimss/ppro-uapiui-operator/raw/master/deploy/all-in-one.yaml`
     - Make sure the Operator container is up and running `kubectl get pods | grep uapi-operator`
-    - Create new Custom Resource `kubectl create -f https://gitlab.com/dimss/ppro-uapiui-operator/raw/master/deploy/crds/uiapi_v1alpha1_uapi_cr.yaml`
+    - Deploy UAPI-UI CR (replace the `K8S_EXTERNAL_NODE_IP` placeholder with actual `minikube ip` ) `curl -qs https://gitlab.com/dimss/ppro-uapiui-operator/raw/master/deploy/crds/uiapi_v1alpha1_uapi_cr.yaml  | NODE_IP=$(minikube ip) sed "s~K8S_EXTERNAL_NODE_IP~${NODE_IP}~g" | k create -f -`
+    - Wait for all resources become `Running`
+    - Get minikube ip and open the url in the browser `echo http://$(minikube ip):30080`
+    
+    Cleanup
+    - `kubectl delete -f https://gitlab.com/dimss/ppro-uapiui-operator/raw/master/deploy/crds/uiapi_v1alpha1_uapi_cr.yaml`
+    - `kubectl delete -f https://gitlab.com/dimss/ppro-uapiui-operator/raw/master/deploy/all-in-one.yaml`
 
 
 
