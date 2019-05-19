@@ -36,7 +36,7 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: "{{uapi-secret}}"
+  name: "uapisecret"
 type: Opaque
 stringData:
   profile: prod
@@ -96,22 +96,22 @@ spec:
         - name: PROFILE
           valueFrom:
             secretKeyRef:
-              name: {{uapi-secret}}
+              name: uapisecret
               key: profile
         - name: DB_HOST
           valueFrom:
             secretKeyRef:
-              name: {{uapi-secret}}
+              name: uapisecret
               key: db_host
         - name: DB_PORT
           valueFrom:
             secretKeyRef:
-              name: {{uapi-secret}}
+              name: uapisecret
               key: db_port
         - name: DB_NAME
           valueFrom:
             secretKeyRef:
-              name: {{uapi-secret}}
+              name: uapisecret
               key: db_name
 
 

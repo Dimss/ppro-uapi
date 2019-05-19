@@ -35,7 +35,7 @@ Two modes of CD are available
     - K8S deployment for API service 
     - K8S `NodePort 30081` service for API service
 
-    Deploy standalone instance of API service with `kubectl apply -f deploy/k8s.yaml`
+    Deploy standalone instance of API service with `kubectl create -f https://gitlab.com/dimss/ppro-uapi/raw/master/deploy/k8s.yaml`
 
 - Deployment with UAPI Operator
     
