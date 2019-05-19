@@ -40,11 +40,11 @@ easy way to add or remove new shards to the sharded cluster.
 The deployment logic is managed by K8S Operator, 
 which provides a powerful solution to manage deployment operations.
 In UAPI-UI operator developer may define any custom logic required 
-for deploying the service, add new components to the UAPI-UI 
+for deploying the application, add new components to the UAPI-UI 
 and hide complex logic and configuration of deployment behind a scene.
 
 To increase development and deployment speed, the UAPI-UI Operator 
-could bounded to the Git hook, which will trigger new deployment when 
+could be bounded to the Git hook, which will trigger new deployment when 
 either new commit or tag is pushed to the Git repo.  
 
 
