@@ -37,7 +37,11 @@ Two modes of CD are available
     - K8S deployment for UI service 
     - K8S `NodePort 30080` service for API service       
     
-    [Deploying the app with uapi operator](https://www.mozilla.org)
+    [Deploying the app with uapi operator](https://gitlab.com/dimss/ppro-uapiui-operator)
+    
+    - Deploy the Operator `kubectl create -f https://gitlab.com/dimss/ppro-uapiui-operator/raw/master/deploy/all-in-one.yaml`
+    - Make sure the Operator container is up and running `kubectl get pods | grep uapi-operator`
+    - Create new Custom Resource `kubectl create -f https://gitlab.com/dimss/ppro-uapiui-operator/raw/master/deploy/crds/uiapi_v1alpha1_uapi_cr.yaml`
 
 
 
