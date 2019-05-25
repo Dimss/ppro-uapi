@@ -19,7 +19,7 @@ spec:
   runPolicy: "Serial"
   source:
     git:
-      uri: "https://github.com/Dimss/ppro-uapi-ui"
+      uri: "https://github.com/Dimss/ppro-uapi"
   strategy:
     sourceStrategy:
       from:

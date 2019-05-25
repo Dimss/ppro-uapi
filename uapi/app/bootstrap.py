@@ -31,7 +31,16 @@ def populate_system_data():
     # The app server running with preload mode,
     # as a result the MongoClient can't be forked
     # open and close connection locally to not cause conn error after fork
-    conn = MongoClient(conf.DB_HOST, conf.DB_PORT, connect=False, serverSelectionTimeoutMS=5000)
+
+    conn = MongoClient(
+        conf.DB_HOST,
+        conf.DB_PORT,
+        username=conf.DB_USER,
+        password=conf.DB_PASS,
+        connect=False,
+        serverSelectionTimeoutMS=5000,
+        authSource=conf.DB_NAME
+    )
     db = conn[conf.DB_NAME]
     try:
         Users(db).create_user(admin_user, 'admin')

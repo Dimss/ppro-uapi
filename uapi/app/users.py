@@ -17,7 +17,15 @@ class DB(object):
     def get_db_conn():
         if DB._CONN is None:
             logging.info("Initiating DB connection")
-            DB._CONN = MongoClient(conf.DB_HOST, conf.DB_PORT, connect=False, serverSelectionTimeoutMS=5000)
+            DB._CONN = MongoClient(
+                conf.DB_HOST,
+                conf.DB_PORT,
+                username=conf.DB_USER,
+                password=conf.DB_PASS,
+                connect=False,
+                serverSelectionTimeoutMS=5000,
+                authSource=conf.DB_NAME
+            )
         else:
             logging.info("DB connection already initiated, using existing DB connection")
         return DB._CONN
